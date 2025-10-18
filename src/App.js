@@ -2,7 +2,7 @@ import { Console } from "@woowacourse/mission-utils";
 
 const PLACEHOLDER = "덧셈할 문자열을 입력해 주세요.\n";
 const ERROR_MESSAGE = "[ERROR]";
-let DELIMITER = [",",":"]
+let DELIMITER = new Set([",",":"]);
 
 class App {
   async run() {
@@ -10,6 +10,8 @@ class App {
     const checkedtext = checkError(text);
     if (!checkedtext) errorMessage();
     findCustomDelimiter(text)
+    let delimiterIndex = getDelimiterIndex(DELIMITER, text);
+    Console.print(delimiterIndex);
   }
 }
 
@@ -26,10 +28,6 @@ function errorMessage() {
   throw new Error(ERROR_MESSAGE);
 }
 
-function calculate(text) {
-
-}
-
 function findCustomDelimiter(text) {
   while (true) {
     let startIndex = text.indexOf("//");
@@ -37,15 +35,24 @@ function findCustomDelimiter(text) {
     let endIndex = text.indexOf("\\n", startIndex);
     
     if (endIndex - startIndex == 3 ) {
-      DELIMITER.push(text[startIndex + 2]);
+      DELIMITER.add(text[startIndex + 2]);
       text = text.slice(endIndex + 1);
     } else {
       text = text.slice(startIndex + 2);
       continue;
     }
   }
-  DELIMITER = [...new Set(DELIMITER)];
-  Console.print(DELIMITER);
+}
+
+function getDelimiterIndex(delimiter, text) {
+  for (let i = 0; i < text.length; i++) {
+    if (delimiter.has(text[i])) return i;
+  }
+  return -1;
+}
+
+function calculate(text) {
+
 }
 
 export default App;
