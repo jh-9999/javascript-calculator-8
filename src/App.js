@@ -11,8 +11,7 @@ class App {
     const checkedtext = checkError(text);
     if (!checkedtext) errorMessage();
     findCustomDelimiter(text)
-    let delimiterIndex = getDelimiterIndex(DELIMITER, text);
-    Console.print(delimiterIndex);
+    calculate(text)
   }
 }
 
@@ -54,11 +53,20 @@ function getDelimiterIndex(delimiter, text) {
 
 function getNumber(text) {
   const number = text.match(/\d+/);
-  if (number) answer += number;
+  if (number) answer += +number;
 }
 
 function calculate(text) {
-
+  while (true) {
+    let delimiterIndex = getDelimiterIndex(DELIMITER, text);
+    if (delimiterIndex == -1) {
+      getNumber(text);
+      break;
+    }
+    let slicedText = text.slice(0, delimiterIndex + 1);
+    text = text.slice(delimiterIndex + 1);
+    getNumber(slicedText);
+  }
 }
 
 export default App;
