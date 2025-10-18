@@ -3,6 +3,7 @@ import { Console } from "@woowacourse/mission-utils";
 const PLACEHOLDER = "덧셈할 문자열을 입력해 주세요.\n";
 const ERROR_MESSAGE = "[ERROR]";
 let DELIMITER = new Set([",",":"]);
+let answer = 0;
 
 class App {
   async run() {
@@ -49,6 +50,11 @@ function getDelimiterIndex(delimiter, text) {
     if (delimiter.has(text[i])) return i;
   }
   return -1;
+}
+
+function getNumber(text) {
+  const number = text.match(/\d+/);
+  if (number) answer += number;
 }
 
 function calculate(text) {
