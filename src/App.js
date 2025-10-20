@@ -1,9 +1,11 @@
 import { Console } from "@woowacourse/mission-utils";
 
 const PLACEHOLDER = "덧셈할 문자열을 입력해 주세요.\n";
+const RESULT_MESSAGE = "결과 : ";
 const ERROR_MESSAGE = "[ERROR]";
-let DELIMITER = new Set([",",":"]);
+
 let answer = 0;
+let delimiter = new Set([",",":"]);
 
 class App {
   async run() {
@@ -12,6 +14,7 @@ class App {
     if (!checkedtext) errorMessage();
     findCustomDelimiter(text)
     calculate(text)
+    Console.print(RESULT_MESSAGE + answer);
   }
 }
 
@@ -20,8 +23,8 @@ async function userInput() {
 }
 
 function checkError(text) {
-  const checkedtext =text.replace(/[^\d]/g, "");
-  return checkedtext ? true : false;
+  const checkedtext = text.match(/-/g);
+  return checkedtext ? false : true;
 }
 
 function errorMessage() {
@@ -35,16 +38,18 @@ function findCustomDelimiter(text) {
     let endIndex = text.indexOf("\\n", startIndex);
     
     if (endIndex - startIndex == 3 ) {
-      DELIMITER.add(text[startIndex + 2]);
+      delimiter.add(text[startIndex + 2]);
       text = text.slice(endIndex + 1);
     } else {
       text = text.slice(startIndex + 2);
       continue;
     }
+
+    Console.print(delimiter);
   }
 }
 
-function getDelimiterIndex(delimiter, text) {
+function getDelimiterIndex(text) {
   for (let i = 0; i < text.length; i++) {
     if (delimiter.has(text[i])) return i;
   }
@@ -53,12 +58,12 @@ function getDelimiterIndex(delimiter, text) {
 
 function getNumber(text) {
   const number = text.match(/\d+/);
-  if (number) answer += +number;
+  if (number) answer += Number(number);
 }
 
 function calculate(text) {
   while (true) {
-    let delimiterIndex = getDelimiterIndex(DELIMITER, text);
+    let delimiterIndex = getDelimiterIndex(text);
     if (delimiterIndex == -1) {
       getNumber(text);
       break;
